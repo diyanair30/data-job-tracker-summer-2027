@@ -18,7 +18,6 @@ Data Analytics, etc.).
 ## Run it
 
 ```bash
-cd ~/Desktop/job-tracker
 npm install --prefix server
 npm install --prefix client
 npm run dev
