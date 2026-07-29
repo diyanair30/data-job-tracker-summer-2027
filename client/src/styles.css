@@ -1,0 +1,316 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0f1115;
+  --panel: #171a21;
+  --border: #2a2e37;
+  --text: #e8eaed;
+  --subtle: #9aa1ac;
+  --accent: #5b8cff;
+  --accent-dim: #2c3a5e;
+  --success: #3ecf8e;
+  --danger: #ff6b6b;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.topbar h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 8px;
+}
+
+.topbar nav a {
+  color: var(--subtle);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.topbar nav a:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.topbar nav a.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  margin: 0 0 4px;
+}
+
+.subtle {
+  color: var(--subtle);
+  font-size: 14px;
+  margin: 0;
+  max-width: 640px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+input,
+select,
+button {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.search {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  min-width: 260px;
+}
+
+button {
+  background: var(--accent);
+  color: #0b0e14;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.error-banner {
+  background: #3a1f22;
+  border: 1px solid var(--danger);
+  color: #ffb3b3;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead th {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--subtle);
+  font-weight: 600;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+}
+
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.row-applied {
+  opacity: 0.55;
+}
+
+.col-check {
+  width: 40px;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  color: var(--subtle);
+  padding: 32px;
+}
+
+.applications-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.applications-table th,
+.applications-table td {
+  padding: 8px 8px;
+  overflow: hidden;
+}
+
+.applications-table th {
+  white-space: normal;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.applications-table col.col-company { width: 9%; }
+.applications-table col.col-position { width: 14%; }
+.applications-table col.col-date-applied { width: 8%; }
+.applications-table col.col-status { width: 11%; }
+.applications-table col.col-stage-due { width: 9%; }
+.applications-table col.col-contact { width: 8%; }
+.applications-table col.col-link { width: 6%; }
+.applications-table col.col-salary { width: 8%; }
+.applications-table col.col-location { width: 9%; }
+.applications-table col.col-notes { width: 14%; }
+.applications-table col.col-remove { width: 4%; }
+
+.applications-table input,
+.applications-table select {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  padding: 6px 6px;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 13px;
+}
+
+.applications-table input:hover,
+.applications-table select:hover,
+.applications-table input:focus,
+.applications-table select:focus {
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  outline: none;
+}
+
+.applications-table td:not(:has(input, select, a, button)) {
+  white-space: normal;
+  word-break: break-word;
+}
+
+a {
+  color: var(--accent);
+}
+
+.icon-btn {
+  background: transparent;
+  color: var(--subtle);
+  padding: 4px 8px;
+}
+
+.icon-btn:hover {
+  color: var(--danger);
+  background: transparent;
+}
+
+.link-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.link-cell input {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-form {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.add-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.add-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+.add-form-notes {
+  grid-column: 1 / -1;
+}
+
+.add-form input,
+.add-form select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #e2e4e9;
+    --text: #1a1d23;
+    --subtle: #6b7280;
+    --accent-dim: #e6edff;
+  }
+}

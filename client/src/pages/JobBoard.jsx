@@ -1,0 +1,159 @@
+import { useEffect, useMemo, useState } from "react";
+import { getJobs, createApplication, deleteApplication } from "../api.js";
+
+export default function JobBoard() {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [pending, setPending] = useState(() => new Set());
+
+  async function load(refresh = false) {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getJobs(refresh);
+      setJobs(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return jobs;
+    return jobs.filter(
+      (j) =>
+        j.position.toLowerCase().includes(q) ||
+        j.company.toLowerCase().includes(q) ||
+        j.location.toLowerCase().includes(q)
+    );
+  }, [jobs, search]);
+
+  async function markApplied(job) {
+    setPending((prev) => new Set(prev).add(job.job_id));
+    try {
+      await createApplication({
+        job_id: job.job_id,
+        company: job.company,
+        position: job.position,
+        application_link: job.url,
+        location: job.location,
+        date_posted: job.date_posted,
+      });
+      setJobs((prev) =>
+        prev.map((j) => (j.job_id === job.job_id ? { ...j, applied: true } : j))
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPending((prev) => {
+        const next = new Set(prev);
+        next.delete(job.job_id);
+        return next;
+      });
+    }
+  }
+
+  async function unmarkApplied(job) {
+    setPending((prev) => new Set(prev).add(job.job_id));
+    try {
+      await deleteApplication(job.application_id);
+      setJobs((prev) =>
+        prev.map((j) =>
+          j.job_id === job.job_id ? { ...j, applied: false, application_id: null } : j
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPending((prev) => {
+        const next = new Set(prev);
+        next.delete(job.job_id);
+        return next;
+      });
+    }
+  }
+
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <h2>Open Data Internships</h2>
+          <p className="subtle">
+            Live feed from three continuously-updated internship trackers, filtered to active roles
+            with "data" in the title that accept a Bachelor's degree, excluding Fall and co-op
+            postings. {jobs.length} open right now.
+          </p>
+        </div>
+        <div className="actions">
+          <input
+            className="search"
+            placeholder="Filter by title, company, or location..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button onClick={() => load(true)} disabled={loading}>
+            {loading ? "Refreshing..." : "Refresh Listings"}
+          </button>
+        </div>
+      </div>
+
+      {error && <div className="error-banner">{error}</div>}
+
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th className="col-check">Applied</th>
+              <th>Position</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Term</th>
+              <th>Date Posted</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((job) => (
+              <tr key={job.job_id} className={job.applied ? "row-applied" : ""}>
+                <td className="col-check">
+                  <input
+                    type="checkbox"
+                    checked={job.applied}
+                    disabled={pending.has(job.job_id)}
+                    onChange={() => (job.applied ? unmarkApplied(job) : markApplied(job))}
+                    title={job.applied ? "Uncheck to remove from My Applications" : "Mark as applied"}
+                  />
+                </td>
+                <td>{job.position}</td>
+                <td>{job.company}</td>
+                <td>{job.location || "—"}</td>
+                <td>{job.terms.length ? job.terms.join(", ") : "—"}</td>
+                <td>{job.date_posted || "—"}</td>
+                <td>
+                  <a href={job.url} target="_blank" rel="noreferrer">
+                    Apply →
+                  </a>
+                </td>
+              </tr>
+            ))}
+            {!loading && filtered.length === 0 && (
+              <tr>
+                <td colSpan={7} className="empty">
+                  No matching internships found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
