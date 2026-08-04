@@ -6,6 +6,7 @@ export default function JobBoard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [pending, setPending] = useState(() => new Set());
 
   async function load(refresh = false) {
@@ -27,14 +28,16 @@ export default function JobBoard() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return jobs;
-    return jobs.filter(
-      (j) =>
-        j.position.toLowerCase().includes(q) ||
-        j.company.toLowerCase().includes(q) ||
-        j.location.toLowerCase().includes(q)
-    );
-  }, [jobs, search]);
+    return jobs
+      .filter((j) => categoryFilter === "All" || j.category === categoryFilter)
+      .filter(
+        (j) =>
+          !q ||
+          j.position.toLowerCase().includes(q) ||
+          j.company.toLowerCase().includes(q) ||
+          j.location.toLowerCase().includes(q)
+      );
+  }, [jobs, search, categoryFilter]);
 
   async function markApplied(job) {
     setPending((prev) => new Set(prev).add(job.job_id));
@@ -85,14 +88,20 @@ export default function JobBoard() {
     <div className="page">
       <div className="page-header">
         <div>
-          <h2>Open Data Internships</h2>
+          <h2>Open Internships</h2>
           <p className="subtle">
-            Live feed from three continuously-updated internship trackers, filtered to active roles
-            with "data" in the title that accept a Bachelor's degree, excluding Fall and co-op
-            postings. {jobs.length} open right now.
+            Live feed from three continuously-updated internship trackers, filtered to active
+            Data, Product Management, and Consulting roles that accept a Bachelor's degree,
+            excluding Fall and co-op postings. {jobs.length} open right now.
           </p>
         </div>
         <div className="actions">
+          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+            <option value="All">All categories</option>
+            <option value="Data">Data</option>
+            <option value="Product">Product</option>
+            <option value="Consulting">Consulting</option>
+          </select>
           <input
             className="search"
             placeholder="Filter by title, company, or location..."
@@ -112,6 +121,7 @@ export default function JobBoard() {
           <thead>
             <tr>
               <th className="col-check">Applied</th>
+              <th>Category</th>
               <th>Position</th>
               <th>Company</th>
               <th>Location</th>
@@ -132,6 +142,11 @@ export default function JobBoard() {
                     title={job.applied ? "Uncheck to remove from My Applications" : "Mark as applied"}
                   />
                 </td>
+                <td>
+                  <span className={`badge badge-${job.category.toLowerCase()}`}>
+                    {job.category}
+                  </span>
+                </td>
                 <td>{job.position}</td>
                 <td>{job.company}</td>
                 <td>{job.location || "—"}</td>
@@ -146,7 +161,7 @@ export default function JobBoard() {
             ))}
             {!loading && filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="empty">
+                <td colSpan={8} className="empty">
                   No matching internships found.
                 </td>
               </tr>
