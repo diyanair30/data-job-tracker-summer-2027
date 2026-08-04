@@ -19,21 +19,11 @@ the application record for you.
 
 ### Open Internships (`/`)
 
-- Live feed aggregated from three continuously-updated public internship trackers:
-  [SimplifyJobs/Summer2026-Internships](https://github.com/SimplifyJobs/Summer2026-Internships),
-  [vanshb03/Summer2027-Internships](https://github.com/vanshb03/Summer2027-Internships), and
-  [zshah101's tech internship list](https://github.com/zshah101/Automated-List-Of-Summer-2027-and-Fall-2026-Tech-Internships).
-- Filtered to **Data** (Engineer/Analyst/Scientist/Analytics), **Product**, and **Consulting**
-  roles — matched by title, not just source tags, so roles like "Product Analyst Intern" are
-  caught even when a source doesn't label them.
 - Only shows postings that:
   - are currently **active**
   - have **"Intern"** in the title (filters out full-time/grad-assistant roles some sources mix in)
   - **accept a Bachelor's degree** (excludes listings explicitly requiring an advanced degree only)
   - aren't **Fall/Co-op only** terms
-- Deduplicates the same posting when it appears across multiple sources (matched by normalized
-  application URL) or twice within one source (matched by company + title + location), merging
-  their term/degree tags rather than picking one arbitrarily.
 - Server-side cache (15 min) to avoid hammering the upstream feeds; a "Refresh Listings" button
   forces a re-fetch.
 - Filter by category, or search by title/company/location.
@@ -81,13 +71,7 @@ npm run dev
 ```
 
 This starts the API on http://localhost:4000 and the frontend on http://localhost:5173 (Vite
-proxies `/api` to the backend). Data is stored locally in `server/data/jobtracker.db` — nothing
-leaves your machine except the outbound fetches to the public listings feeds above.
-
-**Note:** the dev server watches for file changes and auto-restarts (`node --watch index.js`). If
-you ever need to inspect or edit the database directly, stop the server first, or go through the
-API (`curl http://localhost:4000/api/applications`) — editing the SQLite file directly while the
-server is running can leave the on-disk file and the live connection out of sync.
+proxies `/api` to the backend). Data is stored locally in `server/data/jobtracker.db`.
 
 ## API
 
