@@ -5,6 +5,11 @@ listings from public internship-tracking feeds, filters them down to roles that 
 what you're looking for, and lets you check off the ones you've applied to — auto-filling most of
 the application record for you.
 
+**Live demo (Open Internships feed only, read-only):** https://job-tracker-xi-gray.vercel.app
+
+The application tracker is personal, so it isn't part of the public demo — clone the repo to run
+the full app, including your own tracked applications.
+
 ## Screenshots
 
 **Open Internships** — the live, filterable feed:
