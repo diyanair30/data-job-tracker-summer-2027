@@ -3,7 +3,8 @@ const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 let cache = { data: null, fetchedAt: 0 };
 
 // Classifies a listing into the role families this tracker cares about:
-// Data (engineer/analyst/scientist/analytics), Product (management), and
+// Data (engineer/analyst/scientist/analytics), Product (management, plus
+// Program Manager/TPM roles which are grouped in with Product), and
 // Consulting. Simplify tags some listings with a category ("Product",
 // "Product Management") that catches roles a title regex alone would miss
 // (e.g. "Product Analyst Intern"); other sources don't have that field.
@@ -11,7 +12,7 @@ function roleCategory(title, sourceCategory) {
   if (/data/i.test(title)) return "Data";
   if (/consult/i.test(title)) return "Consulting";
   if (
-    /product (manager|management|analyst|operations)/i.test(title) ||
+    /(product|program) (manager|management|analyst|operations)/i.test(title) ||
     sourceCategory === "Product" ||
     sourceCategory === "Product Management"
   ) {
