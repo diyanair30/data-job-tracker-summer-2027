@@ -124,6 +124,12 @@ button:disabled {
   cursor: default;
 }
 
+button.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 .error-banner {
   background: #3a1f22;
   border: 1px solid var(--danger);
@@ -279,6 +285,16 @@ a {
 .badge-consulting {
   background: rgba(255, 176, 59, 0.16);
   color: #ffb03b;
+}
+
+.badge-technology {
+  background: rgba(96, 165, 250, 0.16);
+  color: #60a5fa;
+}
+
+.badge-software {
+  background: rgba(192, 132, 252, 0.16);
+  color: #c084fc;
 }
 
 .link-cell {

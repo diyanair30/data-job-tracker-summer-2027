@@ -21,9 +21,10 @@
       <div class="actions">
         <select id="categoryFilter">
           <option value="All">All categories</option>
-          <option value="Data">Data</option>
+          <option value="Data">Data &amp; AI</option>
           <option value="Product">Product</option>
           <option value="Consulting">Consulting</option>
+          <option value="Technology">Technology</option>
         </select>
         <input class="search" id="search" placeholder="Filter by title, company, or location..." />
         <button id="refreshBtn">Refresh Listings</button>
@@ -113,7 +114,7 @@
         if (!res.ok) throw new Error(`Failed to load listings (${res.status})`);
         jobs = await res.json();
         document.getElementById("summary").textContent =
-          `Live feed from three continuously-updated internship trackers, filtered to active Data, Product Management, and Consulting roles that accept a Bachelor's degree, excluding Fall and co-op postings. ${jobs.length} open right now.`;
+          `Live feed from three continuously-updated internship trackers, filtered to active Data & AI, Product Management, Consulting, and Technology roles that accept a Bachelor's degree, excluding Fall and co-op postings. ${jobs.length} open right now.`;
         render();
       } catch (err) {
         errorBanner.textContent = err.message;

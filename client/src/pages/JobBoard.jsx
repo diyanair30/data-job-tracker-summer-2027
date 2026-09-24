@@ -7,6 +7,7 @@ export default function JobBoard() {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [locationFilter, setLocationFilter] = useState("All");
   const [pending, setPending] = useState(() => new Set());
 
   async function load(refresh = false) {
@@ -30,6 +31,12 @@ export default function JobBoard() {
     const q = search.trim().toLowerCase();
     return jobs
       .filter((j) => categoryFilter === "All" || j.category === categoryFilter)
+      .filter((j) => locationFilter === "All" || j.bay_area_sac)
+      // "Software" is a Bay Area & Sacramento-only catch-all; keep it out of
+      // the default view unless that location (or Software itself) is chosen.
+      .filter(
+        (j) => j.category !== "Software" || locationFilter !== "All" || categoryFilter === "Software"
+      )
       .filter(
         (j) =>
           !q ||
@@ -37,7 +44,7 @@ export default function JobBoard() {
           j.company.toLowerCase().includes(q) ||
           j.location.toLowerCase().includes(q)
       );
-  }, [jobs, search, categoryFilter]);
+  }, [jobs, search, categoryFilter, locationFilter]);
 
   async function markApplied(job) {
     setPending((prev) => new Set(prev).add(job.job_id));
@@ -91,16 +98,23 @@ export default function JobBoard() {
           <h2>Open Internships</h2>
           <p className="subtle">
             Live feed from three continuously-updated internship trackers, filtered to active
-            Data, Product Management, and Consulting roles that accept a Bachelor's degree,
-            excluding Fall and co-op postings. {jobs.length} open right now.
+            Data & AI, Product Management, Consulting, and Technology roles that accept a Bachelor's degree,
+            excluding Fall and co-op postings — plus any non-hardware role in the Bay Area &
+            Sacramento. {filtered.length} shown.
           </p>
         </div>
         <div className="actions">
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
             <option value="All">All categories</option>
-            <option value="Data">Data</option>
+            <option value="Data">Data &amp; AI</option>
             <option value="Product">Product</option>
             <option value="Consulting">Consulting</option>
+            <option value="Technology">Technology</option>
+            <option value="Software">Software (Bay Area &amp; Sac)</option>
+          </select>
+          <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)}>
+            <option value="All">All locations</option>
+            <option value="BayAreaSac">Bay Area &amp; Sacramento</option>
           </select>
           <input
             className="search"

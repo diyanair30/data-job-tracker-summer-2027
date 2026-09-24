@@ -1,6 +1,6 @@
 # Data Internship Tracker
 
-A full-stack tracker for internships in Data, Product, and Consulting roles. It pulls live
+A full-stack tracker for internships in Data & AI, Product, Consulting, and Technology roles. It pulls live
 listings from public internship-tracking feeds, filters them down to roles that actually match
 what you're looking for, and lets you check off the ones you've applied to — auto-filling most of
 the application record for you.
